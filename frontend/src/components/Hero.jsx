@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 function Hero({
   statistics = {
@@ -8,6 +10,8 @@ function Hero({
     totalBids: 0,
   },
 }) {
+  const { isAuthenticated, user } = useContext(AuthContext);
+
   return (
     <section
       className="text-white"
@@ -19,7 +23,6 @@ function Hero({
       }}
     >
       <div className="container">
-
         <div className="row align-items-center">
 
           {/* Left Content */}
@@ -41,21 +44,51 @@ function Hero({
               and hire the best talent with confidence.
             </p>
 
+            {/* Buttons */}
             <div className="d-flex flex-wrap gap-3">
 
-              <Link
-                to="/register"
-                className="btn btn-warning btn-lg px-4"
-              >
-                Get Started
-              </Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    to="/register"
+                    className="btn btn-warning btn-lg px-4"
+                  >
+                    Get Started
+                  </Link>
 
-              <Link
-                to="/projects"
-                className="btn btn-outline-light btn-lg px-4"
-              >
-                Browse Projects
-              </Link>
+                  <Link
+                    to="/projects"
+                    className="btn btn-outline-light btn-lg px-4"
+                  >
+                    Browse Projects
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="btn btn-warning btn-lg px-4"
+                  >
+                    Dashboard
+                  </Link>
+
+                  {user?.role === "client" ? (
+                    <Link
+                      to="/create-project"
+                      className="btn btn-outline-light btn-lg px-4"
+                    >
+                      Create Project
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/projects"
+                      className="btn btn-outline-light btn-lg px-4"
+                    >
+                      Browse Projects
+                    </Link>
+                  )}
+                </>
+              )}
 
             </div>
 
@@ -107,7 +140,6 @@ function Hero({
           </div>
 
         </div>
-
       </div>
     </section>
   );
