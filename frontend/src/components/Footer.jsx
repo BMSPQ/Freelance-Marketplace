@@ -78,6 +78,16 @@ function Footer() {
             © 2026 Freelance Marketplace. All Rights Reserved.
           </p>
 
+          <small
+            style={{
+              fontSize: "10px",
+              color: "#6c757d",
+              letterSpacing: "1px",
+            }}
+          >
+            v1.0 • BMSPQ
+          </small>
+
         </div>
 
       </div>
