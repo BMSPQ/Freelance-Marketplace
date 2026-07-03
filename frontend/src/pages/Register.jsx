@@ -7,7 +7,6 @@ function Register() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -18,6 +17,12 @@ function Register() {
     role: "freelancer",
     skills: "",
     experience: 0,
+    hourlyRate: "",
+    location: "",
+    bio: "",
+    github: "",
+    linkedin: "",
+    portfolio: "",
   });
 
   const handleChange = (e) => {
@@ -47,6 +52,7 @@ function Register() {
         password: formData.password,
         role: formData.role,
         experience: Number(formData.experience),
+
         skills:
           formData.role === "freelancer"
             ? formData.skills
@@ -54,28 +60,26 @@ function Register() {
                 .map((skill) => skill.trim())
                 .filter(Boolean)
             : [],
+
+        // These will be ignored until backend supports them
+        hourlyRate: Number(formData.hourlyRate) || 0,
+        location: formData.location,
+        bio: formData.bio,
+        github: formData.github,
+        linkedin: formData.linkedin,
+        portfolio: formData.portfolio,
       };
 
       const res = await API.post("/auth/register", data);
 
       toast.success(res.data.message);
 
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "freelancer",
-        skills: "",
-        experience: 0,
-      });
-
       navigate("/login");
 
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-        "Registration Failed"
+          "Registration Failed"
       );
     } finally {
       setLoading(false);
@@ -87,9 +91,9 @@ function Register() {
 
       <div className="row justify-content-center">
 
-        <div className="col-lg-6">
+        <div className="col-lg-8">
 
-          <div className="card shadow p-4">
+          <div className="card shadow p-4 rounded-4">
 
             <h2 className="text-center mb-4">
               Create Account
@@ -99,7 +103,6 @@ function Register() {
 
               <div className="mb-3">
                 <label>Name</label>
-
                 <input
                   type="text"
                   name="name"
@@ -112,7 +115,6 @@ function Register() {
 
               <div className="mb-3">
                 <label>Email</label>
-
                 <input
                   type="email"
                   name="email"
@@ -125,7 +127,6 @@ function Register() {
 
               <div className="mb-3">
                 <label>Password</label>
-
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -138,7 +139,6 @@ function Register() {
 
               <div className="mb-3">
                 <label>Confirm Password</label>
-
                 <input
                   type={showPassword ? "text" : "password"}
                   name="confirmPassword"
@@ -149,12 +149,11 @@ function Register() {
                 />
               </div>
 
-              <div className="form-check mb-3">
-
+              <div className="form-check mb-4">
                 <input
-                  className="form-check-input"
                   type="checkbox"
                   id="showPassword"
+                  className="form-check-input"
                   checked={showPassword}
                   onChange={() =>
                     setShowPassword(!showPassword)
@@ -162,12 +161,11 @@ function Register() {
                 />
 
                 <label
-                  className="form-check-label"
                   htmlFor="showPassword"
+                  className="form-check-label"
                 >
                   Show Password
                 </label>
-
               </div>
 
               <div className="mb-3">
@@ -216,26 +214,103 @@ function Register() {
                       onChange={handleChange}
                     />
                   </div>
+
+                  <div className="mb-3">
+                    <label>Hourly Rate (₹)</label>
+
+                    <input
+                      type="number"
+                      name="hourlyRate"
+                      className="form-control"
+                      value={formData.hourlyRate}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label>Location</label>
+
+                    <input
+                      type="text"
+                      name="location"
+                      className="form-control"
+                      placeholder="Bhubaneswar, Odisha"
+                      value={formData.location}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label>Bio</label>
+
+                    <textarea
+                      rows="4"
+                      name="bio"
+                      className="form-control"
+                      placeholder="Tell clients about yourself..."
+                      value={formData.bio}
+                      onChange={handleChange}
+                    ></textarea>
+                  </div>
+
+                  <div className="mb-3">
+                    <label>GitHub</label>
+
+                    <input
+                      type="url"
+                      name="github"
+                      className="form-control"
+                      placeholder="https://github.com/username"
+                      value={formData.github}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label>LinkedIn</label>
+
+                    <input
+                      type="url"
+                      name="linkedin"
+                      className="form-control"
+                      placeholder="https://linkedin.com/in/username"
+                      value={formData.linkedin}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <label>Portfolio</label>
+
+                    <input
+                      type="url"
+                      name="portfolio"
+                      className="form-control"
+                      placeholder="https://yourportfolio.com"
+                      value={formData.portfolio}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </>
               )}
 
               <button
+                type="submit"
                 className="btn btn-success w-100"
                 disabled={loading}
               >
-                {loading ? "Creating Account..." : "Register"}
+                {loading
+                  ? "Creating Account..."
+                  : "Register"}
               </button>
 
             </form>
 
             <p className="text-center mt-3">
-
               Already have an account?{" "}
-
               <Link to="/login">
                 Login
               </Link>
-
             </p>
 
           </div>
